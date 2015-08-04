@@ -123,4 +123,23 @@ describe('preface', function() {
     preface(r, 'c').pipe(w2)
   })
 
+  it('should prepend object data to a stream', function(done) {
+    var r = new TestObjectReadable({objectMode: true})
+    var w = new TestObjectWritable({objectMode: true})
+    var w2 = new TestObjectWritable({objectMode: true})
+
+    r.on('end', function() {
+      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
+      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
+      done()
+    })
+
+    preface(r, {a: 1}, {objectMode: true}).pipe(w)
+
+    r.put({b: 2})
+    r.put({c: 3})
+    r.finish()
+
+    preface(r, {d: 4}, {objectMode: true}).pipe(w2)
+  })
 })

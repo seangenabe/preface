@@ -23,13 +23,14 @@ Creates a new instance of PrependStream.
 * `options: Object`: Options to pass to the Transform constructor.
 * `options.enc: String`: Encoding of the data to push.
 
-### `preface(inputStream, data: String|Buffer|null)`
+### `preface(inputStream, data, [options])`
 
 Returns a new instance of PrependStream constructed with the specified
 arguments.
 
 * `inputStream: stream.Readable` (or any Readable-compatible API)
-* `data: String|Buffer|null`
+* `data: String|Buffer|null` or `any`: Data to prepend to the stream. Can accept any object in [https://nodejs.org/api/stream.html#stream_object_mode](object mode).
+* `options: Object`: options to pass to the PrependStream constructor.
 
 ## CLI
 
