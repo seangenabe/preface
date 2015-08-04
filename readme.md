@@ -13,7 +13,7 @@ A transform stream that prepends data to the incoming stream.
 
 #### `new prependStream(data: String|Buffer|null, options: object)`
 
-Creates a new instanceo of PrependStream.
+Creates a new instance of PrependStream.
 
 * data: The data to prepend to the input stream.
 * options: Options to pass to the Transform constructor.

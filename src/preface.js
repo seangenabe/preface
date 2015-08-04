@@ -1,21 +1,22 @@
 'use strict'
 
-import PrependStream from './prepend-stream'
-export var PrependStream
+var PrependStream = require('./prepend-stream')
 
 /**
  * Prepends data to a new stream.
  */
-export default function preface(inputStream, data) {
+function preface(inputStream, data) {
   return inputStream.pipe(new PrependStream(data))
 }
+module.exports = preface
+preface.PrependStream = PrependStream
 
-export function console() {
-  import minimist from 'minimist'
-  import FS from 'fs'
+module.exports.console = function _console() {
+  var minimist = require('minimist')
+  var FS = require('fs')
 
   var argv = minimist(process.argv.slice(2), {
-    string: ['o', 'i'],
+    string: ['o', 'i', '_'],
     alias: {
       o: 'out',
       i: 'in'
@@ -29,7 +30,7 @@ export function console() {
     o = process.stdout
 
   if (i)
-    i = FS.createWriteStream(i)
+    i = FS.createReadStream(i)
   else
     i = process.stdin
 
@@ -38,5 +39,5 @@ export function console() {
 }
 
 if (require.main === module) {
-  console()
+  module.exports.console()
 }

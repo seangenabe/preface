@@ -1,7 +1,7 @@
 
 import preface, {PrependStream} from '..'
 import {expect} from 'chai'
-import {Writable, Readable} from 'stream'
+import {Writable, Readable, Transform} from 'stream'
 import {WritableStreamBuffer, ReadableStreamBuffer} from 'stream-buffers'
 
 class TestObjectReadable extends Readable {
@@ -10,9 +10,11 @@ class TestObjectReadable extends Readable {
     super(options)
   }
 
-  _read() {
-    this.push({b: 2})
-    this.push({c: 3})
+  put(obj) {
+    this.push(obj)
+  }
+
+  finish() {
     this.push(null)
   }
 }
@@ -20,7 +22,6 @@ class TestObjectReadable extends Readable {
 class TestObjectWritable extends Writable {
 
   constructor(options) {
-    options.objectMode = true
     super(options)
     this.objects = []
   }
@@ -31,37 +32,73 @@ class TestObjectWritable extends Writable {
   }
 }
 
-function bufferTestSetup(done) {
-  var r = new ReadableStreamBuffer()
-  r.put('efgh', 'utf8')
-  var w = new WritableStreamBuffer()
+class TestStringReadable extends Readable {
 
-  w.on('end', function() {
-    expect(w.getContentsAsString('utf8'))
-      .to.equal('abcdefgh')
-    done()
-  })
+  constructor(options) {
+    super(options)
+  }
 
-  return {r, w}
+  put(str) {
+    this.push(str)
+  }
+
+  finish() {
+    this.push(null)
+  }
+}
+
+class TestStringWritable extends Writable {
+
+  constructor(options) {
+    super(options)
+    this.data = ''
+  }
+
+  _write(chunk, encoding, callback) {
+    this.data += chunk
+    callback()
+  }
 }
 
 describe('PrependStream', function() {
 
   it('should prepend a string to a stream', function(done) {
-    var {r, w} = bufferTestSetup(done)
-    r.pipe(new PrependStream('abcd', {enc: 'utf8'})).pipe(w)
-  })
+    var r = new TestStringReadable()
+    var w = new TestStringWritable()
+    var w2 = new TestStringWritable()
 
-  it('should prepend object data to a stream', function(done) {
-    var r = new TestObjectReadable()
-    var w = new TestObjectWritable()
-
-    w.on('end', function() {
-      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
+    r.on('end', function() {
+      expect(w.data).to.equal('ba')
+      expect(w2.data).to.equal('ca')
       done()
     })
 
-    r.pipe(new PrependStream({a: 1})).pipe(w)
+    r.pipe(new PrependStream('b')).pipe(w)
+
+    r.put('a')
+    r.finish()
+
+    r.pipe(new PrependStream('c')).pipe(w2)
+  })
+
+  it('should prepend object data to a stream', function(done) {
+    var r = new TestObjectReadable({objectMode: true})
+    var w = new TestObjectWritable({objectMode: true})
+    var w2 = new TestObjectWritable({objectMode: true})
+
+    r.on('end', function() {
+      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
+      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
+      done()
+    })
+
+    r.pipe(new PrependStream({a: 1}, {objectMode: true})).pipe(w)
+
+    r.put({b: 2})
+    r.put({c: 3})
+    r.finish()
+
+    r.pipe(new PrependStream({d: 4}, {objectMode: true})).pipe(w2)
   })
 
 })
@@ -69,8 +106,22 @@ describe('PrependStream', function() {
 describe('preface', function() {
 
   it('should prepend a string to a stream', function(done) {
-    var {r, w} = bufferTestSetup(done)
-    preface(r, 'abcd').pipe(w)
+    var r = new TestStringReadable()
+    var w = new TestStringWritable()
+    var w2 = new TestStringWritable()
+
+    r.on('end', function() {
+      expect(w.data).to.equal('ba')
+      expect(w2.data).to.equal('ca')
+      done()
+    })
+
+    preface(r, 'b').pipe(w)
+
+    r.put('a')
+    r.finish()
+
+    preface(r, 'c').pipe(w2)
   })
 
 })

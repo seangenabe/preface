@@ -3,10 +3,13 @@
   "version": "1.0.0-1",
   "description": "Prepend data to a file.",
   "main": "lib/preface.js",
+  "bin": {
+    "preface": "bin/preface"
+  },
   "scripts": {
     "test": "mocha --compilers js:babel/register",
-    "compile": "babel --source-maps src --out-dir lib",
-    "watch": "babel --source-maps src --out-dir lib"
+    "compile": "babel src --out-dir lib --source-maps --optional runtime",
+    "watch": "babel src --out-dir lib --source-maps --optional runtime --watch"
   },
   "repository": {
     "type": "git",
@@ -25,10 +28,13 @@
   },
   "homepage": "https://github.com/seangenabe/preface#readme",
   "dependencies": {
+    "babel": "^5.8.20",
+    "babel-runtime": "^5.8.20",
     "minimist": "^1.1.2",
     "through2": "^2.0.0"
   },
   "devDependencies": {
+    "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "stream-buffers": "^2.2.0"
   }
