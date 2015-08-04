@@ -1,0 +1,35 @@
+{
+  "name": "preface",
+  "version": "1.0.0-1",
+  "description": "Prepend data to a file.",
+  "main": "lib/preface.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register",
+    "compile": "babel --source-maps src --out-dir lib",
+    "watch": "babel --source-maps src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seangenabe/preface.git"
+  },
+  "keywords": [
+    "prepend",
+    "file",
+    "stream",
+    "promise"
+  ],
+  "author": "Sean Genabe <seangenabe@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seangenabe/preface/issues"
+  },
+  "homepage": "https://github.com/seangenabe/preface#readme",
+  "dependencies": {
+    "minimist": "^1.1.2",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "stream-buffers": "^2.2.0"
+  }
+}
