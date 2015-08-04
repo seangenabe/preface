@@ -16,6 +16,9 @@ class TestObjectReadable extends Readable {
   finish() {
     this.push(null)
   }
+
+  _read() {
+  }
 }
 
 class TestObjectWritable extends Writable {
@@ -43,6 +46,9 @@ class TestStringReadable extends Readable {
 
   finish() {
     this.push(null)
+  }
+
+  _read() {
   }
 }
 
