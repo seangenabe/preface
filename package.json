@@ -1,7 +1,7 @@
 {
   "name": "preface",
   "version": "1.0.0",
-  "description": "Prepend data to a file.",
+  "description": "Prepend data to a stream or file.",
   "main": "lib/preface.js",
   "bin": {
     "preface": "bin/preface"
@@ -18,8 +18,7 @@
   "keywords": [
     "prepend",
     "file",
-    "stream",
-    "promise"
+    "stream"
   ],
   "author": "Sean Genabe <seangenabe@outlook.com>",
   "license": "MIT",

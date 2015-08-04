@@ -1,6 +1,10 @@
 # Preface
 
-Prepend data to a stream.
+Prepend data to a stream or file.
+
+[![Build Status](https://travis-ci.org/seangenabe/preface.svg?branch=master)](https://travis-ci.org/seangenabe/preface)
+[![Dependency Status](https://david-dm.org/seangenabe/preface.svg)](https://david-dm.org/seangenabe/preface)
+[![devDependency Status](https://david-dm.org/seangenabe/preface/dev-status.svg)](https://david-dm.org/seangenabe/preface#info=devDependencies)
 
 ## API
 
