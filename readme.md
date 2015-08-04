@@ -11,22 +11,25 @@ Prepend data to a stream or file.
     var preface = require('preface')
     var PrependStream = require('preface').PrependStream
 
-### `PrependStream extends Transform`
+### class PrependStream extends Transform
 
 A transform stream that prepends data to the incoming stream.
 
-#### `new prependStream(data: String|Buffer|null, options: object)`
+#### `new PrependStream(data, options)`
 
 Creates a new instance of PrependStream.
 
-* data: The data to prepend to the input stream.
-* options: Options to pass to the Transform constructor.
-* options.enc: Encoding of the data to push.
+* `data: String|Buffer|null`: The data to prepend to the input stream.
+* `options: Object`: Options to pass to the Transform constructor.
+* `options.enc: String`: Encoding of the data to push.
 
-### `preface(inputStream: ReadableStream, data: String|Buffer|null)`
+### `preface(inputStream, data: String|Buffer|null)`
 
 Returns a new instance of PrependStream constructed with the specified
 arguments.
+
+* `inputStream: stream.Readable` (or any Readable-compatible API)
+* `data: String|Buffer|null`
 
 ## CLI
 
