@@ -2,7 +2,6 @@
 import preface, {PrependStream} from '..'
 import {expect} from 'chai'
 import {Writable, Readable, Transform} from 'stream'
-import {WritableStreamBuffer, ReadableStreamBuffer} from 'stream-buffers'
 
 class TestObjectReadable extends Readable {
 
