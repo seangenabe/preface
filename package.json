@@ -1,6 +1,6 @@
 {
   "name": "preface",
-  "version": "1.0.0-1",
+  "version": "1.0.0",
   "description": "Prepend data to a file.",
   "main": "lib/preface.js",
   "bin": {
