@@ -19,14 +19,15 @@ A transform stream that prepends data to the incoming stream.
 
 Creates a new instance of PrependStream.
 
-* `data: String|Buffer|null`: The data to prepend to the input stream.
-* `options: Object`: Options to pass to the Transform constructor.
+* `data: String|Buffer|null`: The data to prepend to the input stream. Can accept any object in [https://nodejs.org/api/stream.html#stream_object_mode](object mode).
+* `options: Object`: Options to pass to the [https://nodejs.org/api/stream.html#stream_new_stream_transform_options](Transform constructor).
 * `options.enc: String`: Encoding of the data to push.
 
 ### `preface(inputStream, data, [options])`
 
 Returns a new instance of PrependStream constructed with the specified
-arguments.
+arguments. This is in a way just a function version to set up the PrependStream
+class.
 
 * `inputStream: stream.Readable` (or any Readable-compatible API)
 * `data: String|Buffer|null` or `any`: Data to prepend to the stream. Can accept any object in [https://nodejs.org/api/stream.html#stream_object_mode](object mode).
