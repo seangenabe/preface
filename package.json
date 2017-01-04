@@ -28,13 +28,13 @@
   },
   "homepage": "https://github.com/seangenabe/preface#readme",
   "dependencies": {
-    "babel": "^5.8.20",
-    "babel-runtime": "^5.8.20",
+    "babel": "^6.5.2",
+    "babel-runtime": "^6.20.0",
     "minimist": "^1.1.2",
     "through2": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "mocha": "^2.2.5"
+    "mocha": "^3.2.0"
   }
 }
