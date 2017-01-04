@@ -1,7 +1,7 @@
-
-import preface, {PrependStream} from '..'
-import {expect} from 'chai'
-import {Writable, Readable, Transform} from 'stream'
+const test = require('ava')
+const preface = require('..')
+const { PrependStream } = require('..')
+const { Writable, Readable, Transform } = require('stream')
 
 class TestObjectReadable extends Readable {
 
@@ -65,87 +65,80 @@ class TestStringWritable extends Writable {
   }
 }
 
-describe('PrependStream', function() {
+test.cb("PrependStream should prepend a string to a stream", t => {
+  let r = new TestStringReadable()
+  let w = new TestStringWritable()
+  let w2 = new TestStringWritable()
 
-  it('should prepend a string to a stream', function(done) {
-    var r = new TestStringReadable()
-    var w = new TestStringWritable()
-    var w2 = new TestStringWritable()
-
-    r.on('end', function() {
-      expect(w.data).to.equal('ba')
-      expect(w2.data).to.equal('ca')
-      done()
-    })
-
-    r.pipe(new PrependStream('b')).pipe(w)
-
-    r.put('a')
-    r.finish()
-
-    r.pipe(new PrependStream('c')).pipe(w2)
+  r.on('end', function() {
+    t.is(w.data, 'ba')
+    t.is(w2.data, 'ca')
+    t.end()
   })
 
-  it('should prepend object data to a stream', function(done) {
-    var r = new TestObjectReadable({objectMode: true})
-    var w = new TestObjectWritable({objectMode: true})
-    var w2 = new TestObjectWritable({objectMode: true})
+  r.pipe(new PrependStream('b')).pipe(w)
 
-    r.on('end', function() {
-      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
-      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
-      done()
-    })
+  r.put('a')
+  r.finish()
 
-    r.pipe(new PrependStream({a: 1}, {objectMode: true})).pipe(w)
-
-    r.put({b: 2})
-    r.put({c: 3})
-    r.finish()
-
-    r.pipe(new PrependStream({d: 4}, {objectMode: true})).pipe(w2)
-  })
-
+  r.pipe(new PrependStream('c')).pipe(w2)
 })
 
-describe('preface', function() {
+test.cb("PrependStream should prepend object data to a stream", t => {
+  let r = new TestObjectReadable({objectMode: true})
+  let w = new TestObjectWritable({objectMode: true})
+  let w2 = new TestObjectWritable({objectMode: true})
 
-  it('should prepend a string to a stream', function(done) {
-    var r = new TestStringReadable()
-    var w = new TestStringWritable()
-    var w2 = new TestStringWritable()
-
-    r.on('end', function() {
-      expect(w.data).to.equal('ba')
-      expect(w2.data).to.equal('ca')
-      done()
-    })
-
-    preface(r, 'b').pipe(w)
-
-    r.put('a')
-    r.finish()
-
-    preface(r, 'c').pipe(w2)
+  r.on('end', function() {
+    t.deepEqual(w.objects, [{a: 1}, {b: 2}, {c: 3}])
+    t.deepEqual(w2.objects, [{d: 4}, {b: 2}, {c: 3}])
+    t.end()
   })
 
-  it('should prepend object data to a stream', function(done) {
-    var r = new TestObjectReadable({objectMode: true})
-    var w = new TestObjectWritable({objectMode: true})
-    var w2 = new TestObjectWritable({objectMode: true})
+  r.pipe(new PrependStream({a: 1}, {objectMode: true})).pipe(w)
 
-    r.on('end', function() {
-      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
-      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
-      done()
-    })
+  r.put({b: 2})
+  r.put({c: 3})
+  r.finish()
 
-    preface(r, {a: 1}, {objectMode: true}).pipe(w)
+  r.pipe(new PrependStream({d: 4}, {objectMode: true})).pipe(w2)
+})
 
-    r.put({b: 2})
-    r.put({c: 3})
-    r.finish()
+test.cb("preface should prepend a string to a stream", t => {
+  let r = new TestStringReadable()
+  let w = new TestStringWritable()
+  let w2 = new TestStringWritable()
 
-    preface(r, {d: 4}, {objectMode: true}).pipe(w2)
+  r.on('end', function() {
+    t.is(w.data, 'ba')
+    t.is(w2.data, 'ca')
+    t.end()
   })
+
+  preface(r, 'b').pipe(w)
+
+  r.put('a')
+  r.finish()
+
+  preface(r, 'c').pipe(w2)
+})
+
+test.cb("prepend should prepend object data to a stream", t => {
+  let r = new TestObjectReadable({objectMode: true})
+  let w = new TestObjectWritable({objectMode: true})
+  let w2 = new TestObjectWritable({objectMode: true})
+
+  r.on('end', function() {
+    t.deepEqual(w.objects, [{a: 1}, {b: 2}, {c: 3}])
+    t.deepEqual(w2.objects, [{d: 4}, {b: 2}, {c: 3}])
+    t.end()
+  })
+
+  preface(r, {a: 1}, {objectMode: true}).pipe(w)
+
+  r.put({b: 2})
+  r.put({c: 3})
+  r.finish()
+
+  preface(r, {d: 4}, {objectMode: true}).pipe(w2)
 })

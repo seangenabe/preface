@@ -2,14 +2,12 @@
   "name": "preface",
   "version": "1.1.1-0",
   "description": "Prepend data to a stream or file.",
-  "main": "lib/preface.js",
+  "main": "src/preface.js",
   "bin": {
     "preface": "bin/preface"
   },
   "scripts": {
-    "test": "npm run compile && mocha --compilers js:babel/register",
-    "compile": "babel src --out-dir lib --source-maps --optional runtime",
-    "watch": "babel src --out-dir lib --source-maps --optional runtime --watch",
+    "test": "ava",
     "start": "node ."
   },
   "repository": {
@@ -28,13 +26,9 @@
   },
   "homepage": "https://github.com/seangenabe/preface#readme",
   "dependencies": {
-    "babel": "^5.8.20",
-    "babel-runtime": "^5.8.20",
-    "minimist": "^1.1.2",
-    "through2": "^2.0.0"
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
-    "mocha": "^2.2.5"
+    "ava": "^0.17.0"
   }
 }

@@ -8,8 +8,10 @@ Prepend data to a stream or file.
 
 ## API
 
-    var preface = require('preface')
-    var PrependStream = require('preface').PrependStream
+```javascript
+var preface = require('preface')
+var PrependStream = require('preface').PrependStream
+```
 
 ### class PrependStream extends Transform
 
