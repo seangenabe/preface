@@ -9,8 +9,8 @@ Prepend data to a stream or file.
 ## API
 
 ```javascript
-var preface = require('preface')
-var PrependStream = require('preface').PrependStream
+const preface = require('preface')
+const PrependStream = require('preface').PrependStream
 ```
 
 ### class PrependStream extends Transform
