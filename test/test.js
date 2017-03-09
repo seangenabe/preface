@@ -1,151 +1,45 @@
+const test = require('ava')
+const preface = require('..')
+const { PrependStream } = require('..')
+const { PassThrough, Transform } = require('stream')
+const getStream = require('get-stream')
 
-import preface, {PrependStream} from '..'
-import {expect} from 'chai'
-import {Writable, Readable, Transform} from 'stream'
+test("PrependStream should prepend a string to a stream", async(t) => {
+  let r = new PassThrough()
+  let w = new PrependStream('a')
 
-class TestObjectReadable extends Readable {
+  r.pipe(w)
+  r.end('b')
 
-  constructor(options) {
-    super(options)
-  }
-
-  put(obj) {
-    this.push(obj)
-  }
-
-  finish() {
-    this.push(null)
-  }
-
-  _read() {
-  }
-}
-
-class TestObjectWritable extends Writable {
-
-  constructor(options) {
-    super(options)
-    this.objects = []
-  }
-
-  _write(chunk, encoding, callback) {
-    this.objects.push(chunk)
-    callback()
-  }
-}
-
-class TestStringReadable extends Readable {
-
-  constructor(options) {
-    super(options)
-  }
-
-  put(str) {
-    this.push(str)
-  }
-
-  finish() {
-    this.push(null)
-  }
-
-  _read() {
-  }
-}
-
-class TestStringWritable extends Writable {
-
-  constructor(options) {
-    super(options)
-    this.data = ''
-  }
-
-  _write(chunk, encoding, callback) {
-    this.data += chunk
-    callback()
-  }
-}
-
-describe('PrependStream', function() {
-
-  it('should prepend a string to a stream', function(done) {
-    var r = new TestStringReadable()
-    var w = new TestStringWritable()
-    var w2 = new TestStringWritable()
-
-    r.on('end', function() {
-      expect(w.data).to.equal('ba')
-      expect(w2.data).to.equal('ca')
-      done()
-    })
-
-    r.pipe(new PrependStream('b')).pipe(w)
-
-    r.put('a')
-    r.finish()
-
-    r.pipe(new PrependStream('c')).pipe(w2)
-  })
-
-  it('should prepend object data to a stream', function(done) {
-    var r = new TestObjectReadable({objectMode: true})
-    var w = new TestObjectWritable({objectMode: true})
-    var w2 = new TestObjectWritable({objectMode: true})
-
-    r.on('end', function() {
-      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
-      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
-      done()
-    })
-
-    r.pipe(new PrependStream({a: 1}, {objectMode: true})).pipe(w)
-
-    r.put({b: 2})
-    r.put({c: 3})
-    r.finish()
-
-    r.pipe(new PrependStream({d: 4}, {objectMode: true})).pipe(w2)
-  })
-
+  let value = await getStream(w)
+  t.is(value, 'ab')
 })
 
-describe('preface', function() {
+test("PrependStream should prepend object data to a stream", async t => {
+  let r = new PassThrough({ objectMode: true })
+  let w = new PrependStream({ a: 1 }, { objectMode: true })
 
-  it('should prepend a string to a stream', function(done) {
-    var r = new TestStringReadable()
-    var w = new TestStringWritable()
-    var w2 = new TestStringWritable()
+  r.pipe(w)
+  r.end({ b: 2 })
 
-    r.on('end', function() {
-      expect(w.data).to.equal('ba')
-      expect(w2.data).to.equal('ca')
-      done()
-    })
+  let arr = await getStream.array(w)
+  t.deepEqual(arr, [{ a: 1 }, { b: 2 }])
+})
 
-    preface(r, 'b').pipe(w)
+test("preface should prepend a string to a stream", async t => {
+  let r = new PassThrough()
+  let w = preface(r, 'a')
 
-    r.put('a')
-    r.finish()
+  r.end('b')
+  let v = await getStream(w)
+  t.is(v, 'ab')
+})
 
-    preface(r, 'c').pipe(w2)
-  })
+test("prepend should prepend object data to a stream", async t => {
+  let r = new PassThrough({ objectMode: true })
+  let w = preface(r, { a: 1 }, { objectMode: true })
 
-  it('should prepend object data to a stream', function(done) {
-    var r = new TestObjectReadable({objectMode: true})
-    var w = new TestObjectWritable({objectMode: true})
-    var w2 = new TestObjectWritable({objectMode: true})
-
-    r.on('end', function() {
-      expect(w.objects).to.deep.equal([{a: 1}, {b: 2}, {c: 3}])
-      expect(w2.objects).to.deep.equal([{d: 4}, {b: 2}, {c: 3}])
-      done()
-    })
-
-    preface(r, {a: 1}, {objectMode: true}).pipe(w)
-
-    r.put({b: 2})
-    r.put({c: 3})
-    r.finish()
-
-    preface(r, {d: 4}, {objectMode: true}).pipe(w2)
-  })
+  r.end({ b: 2 })
+  let arr = await getStream.array(w)
+  t.deepEqual(arr, [{ a: 1 }, { b: 2 }])
 })

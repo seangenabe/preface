@@ -1,19 +1,27 @@
+'use strict'
 
-import {Transform} from 'stream'
+const Transform = require('stream').Transform
 
-export default class PrependStream extends Transform {
+class PrependStream extends Transform {
 
   constructor(data, options) {
     super(options)
-    var enc = null
+    let enc = null
     if (options) {
       enc = options.enc
     }
-    this.push(data, enc)
+    this.firstChunk = true
+    this.prependData = data
   }
 
-  _transform(data, encoding, callback) {
-    callback(null, data)
+  _transform(data, enc, cb) {
+    if (this.firstChunk) {
+      this.firstChunk = false
+      this.push(this.prependData)
+    }
+    cb(null, data)
   }
 
 }
+
+module.exports = PrependStream
