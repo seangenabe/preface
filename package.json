@@ -3,9 +3,7 @@
   "version": "2.0.0",
   "description": "Prepend data to a stream or file.",
   "main": "src/preface.js",
-  "bin": {
-    "preface": "bin/preface"
-  },
+  "bin": "src/console.js",
   "scripts": {
     "test": "ava",
     "start": "node ."
