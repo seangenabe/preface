@@ -1,5 +1,7 @@
 # Preface
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/seangenabe/preface.svg)](https://greenkeeper.io/)
+
 Prepend data to a stream or file.
 
 [![Build Status](https://travis-ci.org/seangenabe/preface.svg?branch=master)](https://travis-ci.org/seangenabe/preface)
