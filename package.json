@@ -27,7 +27,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "get-stream": "^3.0.0"
+    "ava": "^4.3.0",
+    "get-stream": "^6.0.1"
   }
 }
