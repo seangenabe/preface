@@ -1,6 +1,6 @@
 {
   "name": "preface",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Prepend data to a stream or file.",
   "main": "src/preface.js",
   "bin": "src/console.js",
