@@ -13,8 +13,8 @@ const argv = minimist(process.argv.slice(2), {
 })
 
 const { _: [data], o, i } = argv
-o = o ? FS.createWriteStream(o) : process.stdout
-i = i ? FS.createReadStream(i) : process.stdin
+const outputStream = o ? FS.createWriteStream(o) : process.stdout
+const inputStream = i ? FS.createReadStream(i) : process.stdin
 
-i.pipe(new PrependStream(data))
-  .pipe(o)
+inputStream.pipe(new PrependStream(data))
+  .pipe(outputStream)
