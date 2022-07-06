@@ -2,9 +2,7 @@
 
 Prepend data to a stream or file.
 
-[![Build Status](https://travis-ci.org/seangenabe/preface.svg?branch=master)](https://travis-ci.org/seangenabe/preface)
-[![Dependency Status](https://david-dm.org/seangenabe/preface.svg)](https://david-dm.org/seangenabe/preface)
-[![devDependency Status](https://david-dm.org/seangenabe/preface/dev-status.svg)](https://david-dm.org/seangenabe/preface#info=devDependencies)
+[![Node.js CI](https://github.com/seangenabe/preface/actions/workflows/node.js.yml/badge.svg)](https://github.com/seangenabe/preface/actions/workflows/node.js.yml)
 
 ## API
 
